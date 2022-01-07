@@ -1,30 +1,52 @@
-% parametros
+% Parametros
 int: n; % tamaño de la region
 int: m; % cantidad de ciudades
-array[int,int] of int: ciudades;
-int: tam =  length(ciudades);
+array[1..m,1..2] of int: ciudades;
 
-% variables 
+% Variables 
+var int: f;
 var int: x;
 var int: y;
-
-% restricciones (constraints)
+ 
+% Restricciones
 constraint x >= 0;
 constraint y >= 0;
 constraint x <= n;
 constraint y <= n;
+constraint forall (i in 1..m) (ciudades[i,1] != x /\ ciudades[i,2] != y); 
 
-% d(P,C) = |x2-x1|+|y2-y1| donde P y C son coordenadas cartesianas
-% el objetivo es min(d)
+% Declacion de funciones
+function var int: manhattan(var int: x1, var int: y1, 
+                              var int: x2, var int: y2) =
+          abs(x2 - x1) + abs(y2 - y1);
 
-% objetivo
-var int: retsult = sum([(abs(x - ciudades[i,1]) + abs(y - ciudades[i,2]))| i in 1..m]);
-solve minimize retsult;
+% Objetivo
+
+%var int: obj = sum([manhattan(x,y,ciudades[i,1],ciudades[i,2])| i in 1..m]);
+%solve minimize obj;
+
+array[int] of var int: dist = [manhattan(x,y,ciudades[i,1],ciudades[i,2]) | i in 1..m];
+
+
+%constraint f = sum(dist);
+constraint f = sum(i in 1..m)(manhattan(x,y,ciudades[i,1],ciudades[i,2]));
+solve maximize f;
+
+
+%var float: rango = max(dist) - min(dist);
+%solve maximize rango;
+
+
+/*
+output [
+  "Solucion: ", show(dist),"\n",
+  ];
+  */
+
 
 output [
-  "Solution: ", show(retsult),"\n",
+ % "Solucion: ", show(dist),"\n",
   "P(", show(x),",",show(y), ")\n",
+  %"Rango = ", show(rango),"\n",
+  "F = ", show(f),"\n",
   ];
-
-%output["tam = ",  show(tam), " ", show(x)];
-%output[ show(ciudades[i,1])++" " | i in 1..m];
