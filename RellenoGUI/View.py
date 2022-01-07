@@ -1,152 +1,112 @@
-import random
 import tkinter as tk
 from tkinter import ttk
-from tkinter.messagebox import showinfo
 
+class View(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
 
-def create_input_frame(container):
+        # create widgets
+        # label
+        self.label = ttk.Label(self, text='Email:')
+        self.label.grid(row=1, column=0)
 
-    frame = ttk.Frame(container)
-    frame['borderwidth'] = 5
-    frame['relief'] = 'sunken'
+        # email entry
+        self.email_var = tk.StringVar()
+        self.email_entry = ttk.Entry(self, textvariable=self.email_var, width=30)
+        self.email_entry.grid(row=1, column=1, sticky=tk.NSEW)
 
-    # grid layout for the input frame
-    frame.columnconfigure(0, weight=1)
-    frame.columnconfigure(0, weight=3)
+        # save button
+        self.save_button = ttk.Button(self, text='Save', command=self.save_button_clicked)
+        self.save_button.grid(row=1, column=3, padx=10)
 
-    # Tamaño de region
-    ttk.Label(frame, text='Tamaño de region: ').grid(column=0, row=0, sticky=tk.W)
-    keyword = ttk.Entry(frame, width=10)
-    keyword.focus()
-    keyword.grid(column=1, row=0, sticky=tk.W)
+        # message
+        self.message_label = ttk.Label(self, text='', foreground='red')
+        self.message_label.grid(row=2, column=1, sticky=tk.W)
 
-    for widget in frame.winfo_children():
-        widget.grid(padx=0, pady=5)
+        # set the controller
+        self.controller = None
+        
+        # add item button
+        self.add_item_button = ttk.Button(self, text='Add Item', command=self.add_item_button_clicked)
+        self.add_item_button.grid(row=3, column=0, padx=10)
+        
+        # entry x
+        self.x_var = tk.StringVar()
+        self.x_entry = ttk.Entry(self, textvariable=self.x_var, width=10)
+        self.x_entry.grid(row=3, column=1, sticky=tk.NSEW)
+        
+        # entry y
+        self.y_var = tk.StringVar()
+        self.y_entry = ttk.Entry(self, textvariable=self.y_var, width=10)
+        self.y_entry.grid(row=3, column=2, sticky=tk.NSEW)
+        
+        # treeview -------------------------------------------------------------
+        # define columns
+        self.columns = ('1', '2', '3')
 
-    return frame
+        self.tree = ttk.Treeview(self, columns=self.columns, show='headings')
+        
+        # define headings
+        self.tree.heading('1', text='Ciudad')
+        self.tree.heading('2', text='Este')
+        self.tree.heading('3', text='Norte')
+        
+        self.tree.grid(row=0, column=0, sticky='nsew')
 
+        # add a scrollbar
+        self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscroll=self.scrollbar.set)
+        self.scrollbar.grid(row=0, column=1, sticky='ns')
+        # ----------------------------------------------------------------------
 
-def create_button_frame(container):
-    frame = ttk.Frame(container)
-    frame['borderwidth'] = 5
-    frame['relief'] = 'sunken'
+    def set_controller(self, controller):
+        """
+        Set the controller
+        :param controller:
+        :return:
+        """
+        self.controller = controller
 
-    alignment_var = tk.StringVar()
-    alignments = ('Left', 'Center', 'Right')
+    def save_button_clicked(self):
+        """
+        Handle button click event
+        :return:
+        """
+        if self.controller:
+            self.controller.save(self.email_var.get())
 
-    frame.columnconfigure(0, weight=1)
+    def show_error(self, message):
+        """
+        Show an error message
+        :param message:
+        :return:
+        """
+        self.message_label['text'] = message
+        self.message_label['foreground'] = 'red'
+        self.message_label.after(3000, self.hide_message)
+        self.email_entry['foreground'] = 'red'
 
-    ttk.Button(frame, text='Ejecutar').grid(column=0, row=1)
+    def show_success(self, message):
+        """
+        Show a success message
+        :param message:
+        :return:
+        """
+        self.message_label['text'] = message
+        self.message_label['foreground'] = 'green'
+        self.message_label.after(3000, self.hide_message)
 
-    for widget in frame.winfo_children():
-        widget.grid(padx=0, pady=3)
+        # reset the form
+        self.email_entry['foreground'] = 'black'
+        self.email_var.set('')
 
-    return frame
-
-
-def crate_lf(container):
-    
-    # label frame
-    lf = ttk.LabelFrame(container, text='Coordenadas')
-    lf.grid(column=0, row=0, padx=20, pady=20)
-
-    # Coordenada x:
-    ttk.Label(lf, text='X: ').grid(column=0, row=0, sticky=tk.W)
-    current_value_x = tk.StringVar(value=0)
-    spin_box_x = ttk.Spinbox(lf,width=10 , from_=0, to=30, textvariable=current_value_x, wrap=True)
-    spin_box_x.grid(column=0, row=1)
-
-    # Coordenada y:
-    ttk.Label(lf, text='Y: ').grid(column=1, row=0, sticky=tk.W)
-    current_value_y = tk.StringVar(value=0)
-    spin_box_y = ttk.Spinbox(lf,width=10 , from_=0, to=30, textvariable=current_value_y, wrap=True)
-    spin_box_y.grid(column=1, row=1)
-
-    # Añadir punto:
-    ttk.Button(lf, text='Añadir punto').grid(column=0, row=3)
-    
-    return lf
-
-def create_table_frame(container):
-    
-    # label frame
-    label_frame = ttk.LabelFrame(container, text='Tabla')
-    label_frame.grid(column=0, row=0, padx=20, pady=20)
-
-    # define columns
-    columns = ('ciudad', 'este', 'norte')
-    tree = ttk.Treeview(label_frame, columns=columns, show='headings')
-
-    # customice columns
-    width_col = 50
-    tree.column('ciudad', width=width_col, anchor=tk.W)
-    tree.column('este', width=width_col, anchor=tk.W)
-    tree.column('norte', width=width_col, anchor=tk.CENTER)
-
-    # define headings
-    tree.heading('ciudad', text='Ciudad')
-    tree.heading('este', text='Este')
-    tree.heading('norte', text='Norte')
-    
-    # generate sample data
-    contacts = []
-    for n in range(1, 10):
-        x = round(random.random() * 10)
-        y = round(random.random() * 10)
-        contacts.append((f'{n}', f'{x}', f'{y}'))
-
-    # add data to the treeview
-    for contact in contacts:
-        tree.insert('', tk.END, values=contact)
-
-
-    def item_selected(event):
-        for selected_item in tree.selection():
-            item = tree.item(selected_item)
-            record = item['values']
-            # show a message
-            showinfo(title='Information', message=','.join(record))
-
-
-    tree.bind('<<TreeviewSelect>>', item_selected)
-
-    tree.grid(row=0, column=0, sticky='nsew')
-
-    # add a scrollbar
-    scrollbar = ttk.Scrollbar(label_frame, orient=tk.VERTICAL, command=tree.yview)
-    tree.configure(yscroll=scrollbar.set)
-    scrollbar.grid(row=0, column=1, sticky='ns')
-
-    return label_frame  
-
-def create_main_window():
-
-    # root window
-    root = tk.Tk()
-    root.title('Replace')
-    root.geometry('800x600')
-    root.resizable(1, 1)
-    # windows only (remove the minimize/maximize button)
-    root.attributes('-toolwindow', True)
-
-    # layout on the root window
-    root.columnconfigure(0, weight=4)
-    root.columnconfigure(1, weight=1)
-
-    input_frame = create_input_frame(root)
-    input_frame.grid(column=0, row=0)
-
-    lb_frame = crate_lf(root)
-    lb_frame.grid(column=0, row=2)
-
-    table_frame = create_table_frame(root)
-    table_frame.grid(column=0, row=3)
-
-    button_frame = create_button_frame(root)
-    button_frame.grid(column=0, row=4)
-
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    create_main_window()
+    def hide_message(self):
+        """
+        Hide the message
+        :return:
+        """
+        self.message_label['text'] = ''
+        
+    def add_item_button_clicked(self):
+        if self.controller:
+            self.controller.add_item(['0',self.x_var.get(), self.y_var.get()])
