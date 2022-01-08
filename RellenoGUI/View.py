@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
 
 class View(ttk.Frame):
     def __init__(self, parent):
@@ -14,6 +15,7 @@ class View(ttk.Frame):
         
         # set the controller
         self.controller = None
+        
         
         # labe frame parametros
         self.label_frame = ttk.LabelFrame(self, text='Parametros')
@@ -84,38 +86,74 @@ class View(ttk.Frame):
         # ----------------------------------------------------------------------
         
         # figure matplotlib ----------------------------------------------------
-        x_label = [1,2,3,4,5]
-        y_label = [1,2,3,4,5]
-        colores = ['blue','red','green','magenta', 'black']
+        #self.graficar(10)
+        '''# make the data
+        n = 10
+        m = 10
+        
+        num = int(self.controller.get_tam_area())
+        print("Elvalor es : ", num)
+        
+        np.random.seed(3)
+        x = 4 + np.random.normal(0, 2, 24)
+        y = 4 + np.random.normal(0, 2, len(x))
+        # size and color:
+        sizes = np.random.uniform(15, 80, len(x))
+        colors = np.random.uniform(15, 255, len(x))
 
-        fig, axs = plt.subplots(dpi=80, figsize=(5, 5), sharey=True, facecolor='#f3f2f8')
-        fig.suptitle('Graficas Matplotlib')
+        # plot
+        fig, ax = plt.subplots()
+        fig.suptitle('Graficas Ubicaciones')
+        
+        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=100)
 
-        axs.scatter(x_label, y_label, color = colores)
+        ax.set(xlim=(0, n), xticks=np.arange(1, n, step=n/10),
+            ylim=(0, n), yticks=np.arange(1, n, step=n/10))
+        
+        canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=0, column=3)'''
+        # ----------------------------------------------------------------------
+
+    def set_controller(self, controller):
+        self.controller = controller
+
+    def get_tam_area(self):
+        return print("cpsa = ", self.controller.get_tam_area())
+
+    def save_button_clicked(self):
+        if self.controller:
+            self.controller.save()
+        
+    def add_item_button_clicked(self):
+        if self.controller:
+            self.controller.add_item(['0',self.x_var.get(), self.y_var.get()], self.tam_area_var.get())
+            num = int(self.controller.get_tam_area())
+            print(type(num), " ", num)
+            self.graficar(num)
+
+    def graficar(self, n):
+        # figure matplotlib ----------------------------------------------------
+        # make the data
+        #n = 10
+        #m = 10
+        
+        np.random.seed(3)
+        x = 4 + np.random.normal(0, 2, 24)
+        y = 4 + np.random.normal(0, 2, len(x))
+        # size and color:
+        sizes = np.random.uniform(15, 80, len(x))
+        colors = np.random.uniform(15, 255, len(x))
+
+        # plot
+        fig, ax = plt.subplots()
+        fig.suptitle('Graficas Ubicaciones')
+        
+        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=100)
+
+        ax.set(xlim=(0, n), xticks=np.arange(1, n, step=n/10),
+            ylim=(0, n), yticks=np.arange(1, n, step=n/10))
         
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=3)
-        # ----------------------------------------------------------------------
-
-    def set_controller(self, controller):
-        """
-        Set the controller
-        :param controller:
-        :return:
-        """
-        self.controller = controller
-
-    def save_button_clicked(self):
-        """
-        Handle button click event
-        :return:
-        """
-        if self.controller:
-            self.controller.save()
-
-    
-        
-    def add_item_button_clicked(self):
-        if self.controller:
-            self.controller.add_item(['0',self.x_var.get(), self.y_var.get()])

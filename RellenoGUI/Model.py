@@ -1,9 +1,9 @@
 import re
 
 class Model:
-    def __init__(self, item_tree, tam_area):
-        self.item_tree = item_tree
-        self.tam_area = tam_area
+    def __init__(self):
+        self.item_tree = []
+        self.tam_area = 10
 
     @property
     def item_tree(self):
