@@ -12,7 +12,7 @@ class App(tk.Tk):
         self.title('Localizacion de relleno sanitario')
 
         # create a model
-        model = Model('hello@pythontutorial.net', ['ciudad', 'este', 'norte'], 0)
+        model = Model([], 0)
 
         # create a view and place it on the root window
         view = View(self)

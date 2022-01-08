@@ -5,21 +5,9 @@ class Controller:
         self.view = view
         self.cont_item = 0
 
-    def save(self, email):
-        """
-        Save the email
-        :param email:
-        :return:
-        """
+    def save(self):
         try:
-
-            # save the model
-            self.model.email = email
-            self.model.save()
-
-            # show a success message
-            self.view.show_success(f'The email {email} saved!')
-
+            self.model.save_data()
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
