@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class View(ttk.Frame):
     def __init__(self, parent):
@@ -83,6 +85,21 @@ class View(ttk.Frame):
         self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.tree.yview)
         self.tree.configure(yscroll=self.scrollbar.set)
         self.scrollbar.grid(row=0, column=2, sticky='ns')
+        # ----------------------------------------------------------------------
+        
+        # figure matplotlib ----------------------------------------------------
+        nombres = ['Azul', 'Rojo', 'Verde', 'Magenta','Negro']
+        colores = ['blue','red','green','magenta', 'black']
+        tamaño = [15, 25, 10, 20, 30]
+
+        fig, axs = plt.subplots(dpi=80, figsize=(5, 5), sharey=True, facecolor='#00f9f844')
+        fig.suptitle('Graficas Matplotlib')
+
+        axs.scatter(nombres, tamaño, color = colores)
+        
+        canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=0, column=3)
         # ----------------------------------------------------------------------
 
     def set_controller(self, controller):
