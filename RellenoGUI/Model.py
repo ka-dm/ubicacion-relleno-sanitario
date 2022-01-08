@@ -1,9 +1,10 @@
 import re
 
 class Model:
-    def __init__(self, email, item_tree):
+    def __init__(self, email, item_tree, tam_area):
         self.email = email
         self.item_tree = item_tree
+        self.tam_area = tam_area
 
     @property
     def email(self):
@@ -12,6 +13,10 @@ class Model:
     @property
     def item_tree(self):
         return self.__item_tree
+    
+    @property
+    def tam_area(self):
+        return self.__tam_area
 
     @email.setter
     def email(self, value):
@@ -29,6 +34,10 @@ class Model:
     @item_tree.setter
     def item_tree(self, value):
         self.__item_tree = value
+
+    @tam_area.setter
+    def tam_area(self, value):
+        self.__tam_area = value
 
     def save(self):
         """

@@ -1,7 +1,9 @@
 class Controller:
+    
     def __init__(self, model, view):
         self.model = model
         self.view = view
+        self.cont_item = 0
 
     def save(self, email):
         """
@@ -25,6 +27,9 @@ class Controller:
     def add_item(self, item_tree):
         try:
             self.model.item_tree = item_tree
+            item_tree[0] = self.cont_item
+            self.cont_item += 1
+            self.view.tree.insert('', 'end', values=item_tree)
             print(self.model.item_tree)
         except ValueError as error:
             self.view.show_error(error)

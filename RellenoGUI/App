@@ -12,7 +12,7 @@ class App(tk.Tk):
         self.title('Tkinter MVC Demo')
 
         # create a model
-        model = Model('hello@pythontutorial.net', ['ciudad', 'este', 'norte'])
+        model = Model('hello@pythontutorial.net', ['ciudad', 'este', 'norte'], 0)
 
         # create a view and place it on the root window
         view = View(self)

@@ -110,4 +110,3 @@ class View(ttk.Frame):
     def add_item_button_clicked(self):
         if self.controller:
             self.controller.add_item(['0',self.x_var.get(), self.y_var.get()])
-            self.tree.insert('', 'end', values=['0',self.x_var.get(), self.y_var.get()])
