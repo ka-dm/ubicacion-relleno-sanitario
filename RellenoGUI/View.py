@@ -8,16 +8,16 @@ class View(ttk.Frame):
         # create widgets
         # label
         self.label = ttk.Label(self, text='Email:')
-        self.label.grid(row=1, column=0)
+        self.label.grid(row=3, column=3)
 
         # email entry
         self.email_var = tk.StringVar()
         self.email_entry = ttk.Entry(self, textvariable=self.email_var, width=30)
-        self.email_entry.grid(row=1, column=1, sticky=tk.NSEW)
+        self.email_entry.grid(row=3, column=4, sticky=tk.NSEW)
 
         # save button
         self.save_button = ttk.Button(self, text='Save', command=self.save_button_clicked)
-        self.save_button.grid(row=1, column=3, padx=10)
+        self.save_button.grid(row=3, column=5, padx=10)
 
         # message
         self.message_label = ttk.Label(self, text='', foreground='red')
@@ -26,19 +26,40 @@ class View(ttk.Frame):
         # set the controller
         self.controller = None
         
+        
+        self.label_frame = ttk.LabelFrame(self, text='Parametros')
+        self.label_frame.grid(column=0, row=0, padx=50, pady=50)
+        
+        # label tamaño area
+        self.label_tam_area = ttk.Label(self.label_frame, text='Tamaño del area: ')
+        self.label_tam_area.grid(row=0, column=0)
+
+        # tamaño area entry
+        self.tam_area_var = tk.StringVar()
+        self.tam_area_entry = ttk.Entry(self.label_frame, textvariable=self.tam_area_var, width=10)
+        self.tam_area_entry.grid(row=0, column=1, sticky=tk.NSEW)
+        
         # add item button
-        self.add_item_button = ttk.Button(self, text='Add Item', command=self.add_item_button_clicked)
-        self.add_item_button.grid(row=3, column=0, padx=10)
+        self.add_item_button = ttk.Button(self.label_frame, text='Agregar punto', command=self.add_item_button_clicked)
+        self.add_item_button.grid(row=4, column=0, padx=10)
+        
+        # label x
+        self.label_tam_area = ttk.Label(self.label_frame, text='x: ')
+        self.label_tam_area.grid(row=2, column=0)
         
         # entry x
         self.x_var = tk.StringVar()
-        self.x_entry = ttk.Entry(self, textvariable=self.x_var, width=10)
-        self.x_entry.grid(row=3, column=1, sticky=tk.NSEW)
+        self.x_entry = ttk.Entry(self.label_frame, textvariable=self.x_var, width=10)
+        self.x_entry.grid(row=2, column=1, sticky=tk.NSEW)
+        
+        # label y
+        self.label_tam_area = ttk.Label(self.label_frame, text='y: ')
+        self.label_tam_area.grid(row=3, column=0)
         
         # entry y
         self.y_var = tk.StringVar()
-        self.y_entry = ttk.Entry(self, textvariable=self.y_var, width=10)
-        self.y_entry.grid(row=3, column=2, sticky=tk.NSEW)
+        self.y_entry = ttk.Entry(self.label_frame, textvariable=self.y_var, width=10)
+        self.y_entry.grid(row=3, column=1, sticky=tk.NSEW)
         
         # treeview -------------------------------------------------------------
         # define columns
@@ -46,17 +67,22 @@ class View(ttk.Frame):
 
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings')
         
+        # colums whidth
+        self.tree.column('1', width=50, anchor=tk.W)
+        self.tree.column('2', width=50, anchor=tk.W)
+        self.tree.column('3', width=50, anchor=tk.CENTER)
+        
         # define headings
         self.tree.heading('1', text='Ciudad')
         self.tree.heading('2', text='Este')
         self.tree.heading('3', text='Norte')
         
-        self.tree.grid(row=0, column=0, sticky='nsew')
+        self.tree.grid(row=0, column=1, sticky='nsew')
 
         # add a scrollbar
         self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.tree.yview)
         self.tree.configure(yscroll=self.scrollbar.set)
-        self.scrollbar.grid(row=0, column=1, sticky='ns')
+        self.scrollbar.grid(row=0, column=2, sticky='ns')
         # ----------------------------------------------------------------------
 
     def set_controller(self, controller):

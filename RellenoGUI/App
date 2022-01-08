@@ -9,7 +9,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title('Tkinter MVC Demo')
+        self.title('Localizacion de relleno sanitario')
 
         # create a model
         model = Model('hello@pythontutorial.net', ['ciudad', 'este', 'norte'], 0)
