@@ -28,3 +28,4 @@ class Controller:
             print(self.model.item_tree)
         except ValueError as error:
             self.view.show_error(error)
+    
