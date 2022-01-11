@@ -21,11 +21,15 @@ class Model:
     def tam_area(self, value):
         self.__tam_area = value
 
-    def save_data(self):
-        """
-        save an item into the tree
-        :return:
-        """
-        with open('Datos.txt', 'a') as f:
-            f.write('|' + self.item_tree[1] + ',' +self.item_tree[2]  + '\n')
+    def save_data(self, data):
+        with open('Datos.dzm', 'w') as f:
+            f.write(data)
+            f.close()
         print('Se guardaron los datos correctamente')
+    
+    def read_data(self):
+        with open('Datos.dzm', 'r') as f:
+            cadena = f.read()
+        return cadena
+    
+    

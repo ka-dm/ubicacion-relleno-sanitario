@@ -19,11 +19,7 @@ class View(ttk.Frame):
         
         # labe frame parametros
         self.label_frame = ttk.LabelFrame(self, text='Parametros')
-        self.label_frame.grid(column=0, row=0, padx=50)
-        
-        # save button
-        self.save_button = ttk.Button(self.label_frame, text='Save', command=self.save_button_clicked)
-        self.save_button.grid(row=4, column=3, padx=10)
+        self.label_frame.grid(column=0, row=0, padx=0)
 
         # message
         self.message_label = ttk.Label(self, text='', foreground='red')
@@ -35,7 +31,7 @@ class View(ttk.Frame):
 
         # tamaño area entry
         self.tam_area_var = tk.StringVar()
-        self.tam_area_entry = ttk.Entry(self.label_frame, textvariable=self.tam_area_var, width=10)
+        self.tam_area_entry = ttk.Entry(self.label_frame, textvariable=self.tam_area_var, width=10, )
         self.tam_area_entry.grid(row=0, column=1, padx=10, pady=5)
         
         # add item button
@@ -84,35 +80,26 @@ class View(ttk.Frame):
         self.tree.configure(yscroll=self.scrollbar.set)
         self.scrollbar.grid(row=0, column=2, sticky='ns')
         # ----------------------------------------------------------------------
+        # data buttons ---------------------------------------------------------
+        # labe frame data controllers buttons
+        self.lb_data_controllers = ttk.LabelFrame(self, text='Controles')
+        self.lb_data_controllers.grid(column=0, row=1, padx=10)
+        
+        # save button
+        self.save_button = ttk.Button(self.lb_data_controllers, text='Guardar', command=self.save_button_clicked)
+        self.save_button.grid(row=0, column=0, padx=10)
+        
+        # import button
+        self.save_button = ttk.Button(self.lb_data_controllers, text='Importar', command=self.save_button_clicked)
+        self.save_button.grid(row=0, column=1, padx=10)
+        
+        # run model button
+        self.save_button = ttk.Button(self.lb_data_controllers, text='Ejecutar', command=self.save_button_clicked)
+        self.save_button.grid(row=0, column=2, padx=10)
         
         # figure matplotlib ----------------------------------------------------
         #self.graficar(10)
-        '''# make the data
-        n = 10
-        m = 10
-        
-        num = int(self.controller.get_tam_area())
-        print("Elvalor es : ", num)
-        
-        np.random.seed(3)
-        x = 4 + np.random.normal(0, 2, 24)
-        y = 4 + np.random.normal(0, 2, len(x))
-        # size and color:
-        sizes = np.random.uniform(15, 80, len(x))
-        colors = np.random.uniform(15, 255, len(x))
-
-        # plot
-        fig, ax = plt.subplots()
-        fig.suptitle('Graficas Ubicaciones')
-        
-        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=100)
-
-        ax.set(xlim=(0, n), xticks=np.arange(1, n, step=n/10),
-            ylim=(0, n), yticks=np.arange(1, n, step=n/10))
-        
-        canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
-        canvas.draw()
-        canvas.get_tk_widget().grid(row=0, column=3)'''
+        self.graficar(10, [], [])
         # ----------------------------------------------------------------------
 
     def set_controller(self, controller):
@@ -128,19 +115,15 @@ class View(ttk.Frame):
     def add_item_button_clicked(self):
         if self.controller:
             self.controller.add_item(['0',self.x_var.get(), self.y_var.get()], self.tam_area_var.get())
-            num = int(self.controller.get_tam_area())
-            print(type(num), " ", num)
-            self.graficar(num)
+            tam_area = int(self.controller.get_tam_area())
+            #print(type(num), " ", num)
+            x,y = self.controller.get_data_tree()
+            #print("x = ", x)
+            self.controller.generate_dzm_content(x,y, tam_area)
+            self.graficar(tam_area, x, y)
 
-    def graficar(self, n):
+    def graficar(self, n, x , y):
         # figure matplotlib ----------------------------------------------------
-        # make the data
-        #n = 10
-        #m = 10
-        
-        np.random.seed(3)
-        x = 4 + np.random.normal(0, 2, 24)
-        y = 4 + np.random.normal(0, 2, len(x))
         # size and color:
         sizes = np.random.uniform(15, 80, len(x))
         colors = np.random.uniform(15, 255, len(x))
@@ -157,3 +140,7 @@ class View(ttk.Frame):
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=3)
+        # ---------------------------------------------------------------------
+        
+    
+                
