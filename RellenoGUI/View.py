@@ -34,13 +34,14 @@ class View(ttk.Frame):
         self.tam_area_entry = ttk.Entry(self.label_frame, textvariable=self.tam_area_var, width=10, )
         self.tam_area_entry.grid(row=0, column=1, padx=10, pady=5)
         
-        # add item button
+        # add item button ----
         self.add_item_button = ttk.Button(self.label_frame, text='+', command=self.add_item_button_clicked)
-        self.add_item_button.grid(row=2, column=3, padx=5)
+        self.add_item_button.config(width=2)
+        self.add_item_button.grid(row=2, column=3, padx=1, pady=1)
       
         
-        # label x
-        self.label_tam_area = ttk.Label(self.label_frame, text='x: ')
+        # label x (Este)
+        self.label_tam_area = ttk.Label(self.label_frame, text='Este: ')
         self.label_tam_area.grid(row=2, column=0)
         
         # entry x
@@ -48,8 +49,8 @@ class View(ttk.Frame):
         self.x_entry = ttk.Entry(self.label_frame, textvariable=self.x_var, width=10)
         self.x_entry.grid(row=2, column=1, padx=10, pady=5)
         
-        # label y
-        self.label_tam_area = ttk.Label(self.label_frame, text='y: ')
+        # label y (Norte)
+        self.label_tam_area = ttk.Label(self.label_frame, text='Norte: ')
         self.label_tam_area.grid(row=3, column=0)
         
         # entry y
@@ -64,8 +65,8 @@ class View(ttk.Frame):
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings')
         
         # colums whidth
-        self.tree.column('1', width=50, anchor=tk.W)
-        self.tree.column('2', width=50, anchor=tk.W)
+        self.tree.column('1', width=50, anchor=tk.CENTER)
+        self.tree.column('2', width=50, anchor=tk.CENTER)
         self.tree.column('3', width=50, anchor=tk.CENTER)
         
         # define headings
@@ -73,21 +74,17 @@ class View(ttk.Frame):
         self.tree.heading('2', text='Este')
         self.tree.heading('3', text='Norte')
         
-        self.tree.grid(row=0, column=1, sticky='nsew')
+        self.tree.grid(row=1, column=0, sticky='nsew')
 
         # add a scrollbar
         self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.tree.yview)
         self.tree.configure(yscroll=self.scrollbar.set)
-        self.scrollbar.grid(row=0, column=2, sticky='ns')
+        self.scrollbar.grid(row=1, column=2, sticky='ns')
         # ----------------------------------------------------------------------
         # data buttons ---------------------------------------------------------
         # labe frame data controllers buttons
         self.lb_data_controllers = ttk.LabelFrame(self, text='Controles')
-        self.lb_data_controllers.grid(column=0, row=1, padx=10)
-        
-        # save button
-        self.save_button = ttk.Button(self.lb_data_controllers, text='Guardar', command=self.save_button_clicked)
-        self.save_button.grid(row=0, column=0, padx=10)
+        self.lb_data_controllers.grid(column=0, row=2, padx=10)
         
         # import button
         self.save_button = ttk.Button(self.lb_data_controllers, text='Importar', command=self.save_button_clicked)
@@ -133,14 +130,14 @@ class View(ttk.Frame):
         fig, ax = plt.subplots()
         fig.suptitle('Graficas Ubicaciones')
         
-        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=100)
+        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=50)
 
         ax.set(xlim=(0, n), xticks=np.arange(1, n, step=n/10),
             ylim=(0, n), yticks=np.arange(1, n, step=n/10))
         
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
-        canvas.get_tk_widget().grid(row=0, column=3)
+        canvas.get_tk_widget().grid(row=0, column=3, rowspan=3, sticky='nsew')
         # ---------------------------------------------------------------------
         
     
