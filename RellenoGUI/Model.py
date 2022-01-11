@@ -1,4 +1,4 @@
-import re
+from pymzn import dzn
 
 class Model:
     def __init__(self):
@@ -22,14 +22,13 @@ class Model:
         self.__tam_area = value
 
     def save_data(self, data):
-        with open('Datos.dzm', 'w') as f:
+        with open("Datos.dzn", "w") as f:
+            #f.write("\n".join(data))
             f.write(data)
-            f.close()
-        print('Se guardaron los datos correctamente')
     
     def read_data(self):
-        with open('Datos.dzm', 'r') as f:
+        with open('Datos.dzn', 'r') as f:
             cadena = f.read()
         return cadena
-    
-    
+
+        

@@ -7,7 +7,8 @@ class Controller:
 
     def save(self):
         try:
-            self.model.save_data()
+            x,y = self.get_data_tree()
+            data = self.generate_dzm_content(x,y, self.get_tam_area())
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
@@ -23,7 +24,8 @@ class Controller:
             self.cont_item += 1
             self.view.tree.insert('', 'end', values=item_tree)
             self.model.tam_area = tam_area
-            print(self.model.item_tree)
+            
+            #print(self.model.item_tree)
             #print(self.model.tam_area)
         except ValueError as error:
             self.view.show_error(error)
@@ -38,13 +40,13 @@ class Controller:
         return x,y
     
     def generate_dzm_content(self,x,y, n):
-        cadena = 'n='+ str(n) + ';\n' +'m=' + str(len(x)) + ';\n' +  'ciudades=['
+        cadena = 'n='+ str(n) + '; \n' +'m=' + str(len(x)) + '; \n' +  'ciudades=['
         for i in range(len(x)):
             line = "|"+str(x[i])+","+str(y[i])
             if (i == len(x)-1):
                 cadena = cadena + line + "|];"
             else:
-                cadena = cadena + line  + "\n"
+                cadena = cadena + line  + " \n"
         self.model.save_data(cadena)
         #print(cadena)
         self.extract_dzm_content()

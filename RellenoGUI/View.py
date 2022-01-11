@@ -26,7 +26,7 @@ class View(ttk.Frame):
         self.message_label.grid(row=2, column=1, sticky=tk.W)
 
         # label tamaño area
-        self.label_tam_area = ttk.Label(self.label_frame, text='Tamaño del area: ')
+        self.label_tam_area = ttk.Label(self.label_frame, text='Region: ')
         self.label_tam_area.grid(row=0, column=0)
 
         # tamaño area entry
@@ -111,6 +111,7 @@ class View(ttk.Frame):
     def save_button_clicked(self):
         if self.controller:
             self.controller.save()
+            
         
     def add_item_button_clicked(self):
         if self.controller:
