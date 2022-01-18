@@ -17,7 +17,6 @@ constraint f = min(dist);
 solve maximize f;
  
 output [
-  %"Solucion: ", show(dist),"\n",
   "P(", show(x),",",show(y), ")\n",
-  "F = ", show(f),"\n",
+  "Distancia = ", show(f),"\n",
   ];

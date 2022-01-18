@@ -26,8 +26,8 @@ class Model:
             #f.write("\n".join(data))
             f.write(data)
     
-    def read_data(self):
-        with open('Datos.dzn', 'r') as f:
+    def import_data(self, src):
+        with open(src, 'r') as f:
             cadena = f.read()
         return cadena
 

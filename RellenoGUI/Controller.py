@@ -1,3 +1,7 @@
+from tkinter import Tk
+from tkinter import filedialog
+
+
 class Controller:
     
     def __init__(self, model, view):
@@ -9,6 +13,16 @@ class Controller:
         try:
             x,y = self.get_data_tree()
             data = self.generate_dzm_content(x,y, self.get_tam_area())
+        except ValueError as error:
+            # show an error message
+            self.view.show_error(error)
+    
+    def import_data(self):
+        try:
+            src = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("dzn files","*.dzn"),("all files","*.*")))
+            print("src = ",src)
+            data = self.model.import_data(src)
+            print(data)
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
@@ -29,6 +43,15 @@ class Controller:
             #print(self.model.tam_area)
         except ValueError as error:
             self.view.show_error(error)
+    
+    def set_data_tree(self):
+        x = []
+        y = []
+        
+        for line in self.view.tree.get_children():
+            x.append(self.view.tree.item(line)['values'][1])
+            y.append(self.view.tree.item(line)['values'][2])
+        return x,y
     
     def get_data_tree(self):
         x = []
@@ -52,9 +75,10 @@ class Controller:
         self.extract_dzm_content()
         
     def extract_dzm_content(self):
-        datos = self.model.read_data()
-        lineas = datos.split(';')
-        print(lineas)
+        #datos = self.model.read_data()
+        #lineas = datos.split(';')
+        #print(lineas)
+        print("extract_dzm_content")
         
         
                 

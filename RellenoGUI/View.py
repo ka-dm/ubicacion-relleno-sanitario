@@ -95,7 +95,7 @@ class View(ttk.Frame):
         self.lb_data_controllers.grid(column=0, row=2, padx=0, pady=10 , columnspan=2, sticky='nsew')
         
         # import button
-        self.save_button = ttk.Button(self.lb_data_controllers, text='Importar', command=self.save_button_clicked)
+        self.save_button = ttk.Button(self.lb_data_controllers, text='Importar', command=self.import_button_clicked)
         self.save_button.grid(row=0, column=1, padx=10)
         
         # run model button
@@ -116,8 +116,11 @@ class View(ttk.Frame):
     def save_button_clicked(self):
         if self.controller:
             self.controller.save()
-            
-        
+    
+    def import_button_clicked(self):
+        if self.controller:
+            self.controller.import_data()
+    
     def add_item_button_clicked(self):
         if self.controller:
             self.controller.add_item(['0',self.x_var.get(), self.y_var.get()], self.tam_area_var.get())
@@ -142,8 +145,6 @@ class View(ttk.Frame):
         
         # fig plt style sean-whitegrid
         plt.style.use('seaborn-whitegrid')
-        
-        
         
         ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=50)
         
