@@ -1,0 +1,5 @@
+output ["P(",show(x),",",show(y),")\n","F = ",show(f),"\n","arreglo = ",show(arreglo),"\n"];
+float: f;
+float: x;
+float: y;
+array [int] of float: arreglo;
