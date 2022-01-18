@@ -146,9 +146,11 @@ class View(ttk.Frame):
         
         
         ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=50)
-
-        ax.set(xlim=(0, n), xticks=np.arange(1, n, step=n/10),
-            ylim=(0, n), yticks=np.arange(1, n, step=n/10))
+        
+        escala = n / 10
+        
+        ax.set(xlim=(0, n), xticks=np.arange(1, n+1, step=escala),
+            ylim=(0, n), yticks=np.arange(1, n+1, step=escala))
         
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
