@@ -19,10 +19,7 @@ class Controller:
     
     def import_data(self):
         try:
-            src = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("dzn files","*.dzn"),("all files","*.*")))
-            print("src = ",src)
-            data = self.model.import_data(src)
-            print(data)
+            self.set_data_tree()
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
@@ -45,13 +42,20 @@ class Controller:
             self.view.show_error(error)
     
     def set_data_tree(self):
-        x = []
-        y = []
+        src = filedialog.askopenfilename(initialdir = "C:/Users/kevin/Documents/ProyectoUbicacionRelleno/MiniZnFiles/Datos-20220111",
+                                         title = "Select file",
+                                         filetypes = [("dzn files","*.dzn")])
+        #print("src = ",src)
+        data = self.model.import_data(src)
+        self.celar_data_tree()
+        for i in range(0 , len(data['ciudades']), 2):
+            este = data['ciudades'][i]
+            norte = data['ciudades'][i+1]
+            self.add_item(['0',data['ciudades'][i],data['ciudades'][i+1]], data['n'])
         
-        for line in self.view.tree.get_children():
-            x.append(self.view.tree.item(line)['values'][1])
-            y.append(self.view.tree.item(line)['values'][2])
-        return x,y
+    def celar_data_tree(self):
+        for i in self.view.tree.get_children():
+            self.view.tree.delete(i)
     
     def get_data_tree(self):
         x = []

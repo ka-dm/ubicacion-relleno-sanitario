@@ -23,12 +23,11 @@ class Model:
 
     def save_data(self, data):
         with open("Datos.dzn", "w") as f:
-            #f.write("\n".join(data))
             f.write(data)
     
     def import_data(self, src):
         with open(src, 'r') as f:
-            cadena = f.read()
+            cadena = dzn.dzn2dict(f.read())
         return cadena
 
         
