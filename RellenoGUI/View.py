@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import END, ttk
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 
@@ -138,32 +139,31 @@ class View(ttk.Frame):
             self.controller.generate_dzm_content(x,y, tam_area)
             self.graficar(tam_area, x, y)
 
-    def graficar(self, n=10, x=[] , y=[]):
+    def graficar(self, n=10, x=[] , y=[], relleno_x=-1, relleno_y=-1):
         # figure matplotlib ----------------------------------------------------
         # size and color:
-        sizes = np.random.uniform(15, 80, len(x))
-        colors = np.random.uniform(15, 255, len(x))
-
+        size_points = 50
+        #colors = np.random.uniform(15, 255, len(x))
+        colors = cm.rainbow(np.linspace(0, 1, len(x)))
         # plot
-        
         fig, ax = plt.subplots()
         fig.suptitle('Graficas Ubicaciones')
         fig.set_facecolor('#F0F0F0')
-        
         # fig plt style sean-whitegrid
         plt.style.use('seaborn-whitegrid')
-        
-        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=50)
-        
+        ax.scatter(x, y, s=size_points , c=colors, vmin=0, vmax=50)
         escala = n / 10
-        
         ax.set(xlim=(0, n), xticks=np.arange(1, n+1, step=escala),
-            ylim=(0, n), yticks=np.arange(1, n+1, step=escala))
-        
+               ylim=(0, n), yticks=np.arange(1, n+1, step=escala))
+        # Labels points
+        for i in range(len(x)):
+            ax.annotate(i, 
+                        xy=(x[i], y[i]), #show point 
+                        xytext=(5, 2), #show annotate
+                        textcoords='offset points',
+                        ha='right',
+                        va='bottom')
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=3, rowspan=3, sticky='nsew')
         # ---------------------------------------------------------------------
-        
-    
-                

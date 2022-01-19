@@ -20,12 +20,13 @@ class Controller:
     def import_data(self):
         try:
             src = filedialog.askopenfilename(initialdir = "C:/Users/kevin/Documents/ProyectoUbicacionRelleno/MiniZnFiles/Datos-20220111",
-                                         title = "Select file",
-                                         filetypes = [("dzn files","*.dzn")])
-            #print("src = ",src)
+                                            title = "Select file",
+                                            filetypes = [("dzn files","*.dzn")])
             data = self.model.import_data(src)
             self.set_data_tree(data)
+            x_array, y_array = self.get_data_tree()
             self.view.set_text(self.view.tam_area_entry, data['n'])
+            self.view.graficar(data['n'], x_array, y_array)
         except ValueError as error:
             # show an error message
             self.view.show_error(error)

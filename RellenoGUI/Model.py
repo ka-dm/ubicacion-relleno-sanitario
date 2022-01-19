@@ -27,7 +27,7 @@ class Model:
     
     def import_data(self, src):
         with open(src, 'r') as f:
-            cadena = dzn.dzn2dict(f.read())
-        return cadena
+            dict_data = dzn.dzn2dict(f.read())
+        return dict_data
 
         
