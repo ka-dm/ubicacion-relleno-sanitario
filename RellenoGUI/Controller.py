@@ -19,7 +19,13 @@ class Controller:
     
     def import_data(self):
         try:
-            self.set_data_tree()
+            src = filedialog.askopenfilename(initialdir = "C:/Users/kevin/Documents/ProyectoUbicacionRelleno/MiniZnFiles/Datos-20220111",
+                                         title = "Select file",
+                                         filetypes = [("dzn files","*.dzn")])
+            #print("src = ",src)
+            data = self.model.import_data(src)
+            self.set_data_tree(data)
+            self.view.set_text(self.view.tam_area_entry, data['n'])
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
@@ -41,12 +47,7 @@ class Controller:
         except ValueError as error:
             self.view.show_error(error)
     
-    def set_data_tree(self):
-        src = filedialog.askopenfilename(initialdir = "C:/Users/kevin/Documents/ProyectoUbicacionRelleno/MiniZnFiles/Datos-20220111",
-                                         title = "Select file",
-                                         filetypes = [("dzn files","*.dzn")])
-        #print("src = ",src)
-        data = self.model.import_data(src)
+    def set_data_tree(self, data):
         self.celar_data_tree()
         for i in range(0 , len(data['ciudades']), 2):
             este = data['ciudades'][i]

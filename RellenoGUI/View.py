@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import END, ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
@@ -36,7 +36,7 @@ class View(ttk.Frame):
         self.tam_area_var = tk.StringVar()
         self.tam_area_entry = ttk.Entry(self.label_frame, textvariable=self.tam_area_var, width=10, )
         self.tam_area_entry.grid(row=0, column=1, padx=10, pady=5, columnspan=3, sticky='nsew')
-        
+        self.set_text(self.tam_area_entry, '10')
         
         # label x (Este)
         self.label_tam_area = ttk.Label(self.lb_coordenadas, text='Este: ')
@@ -46,6 +46,7 @@ class View(ttk.Frame):
         self.x_var = tk.StringVar()
         self.x_entry = ttk.Entry(self.lb_coordenadas, textvariable=self.x_var, width=5)
         self.x_entry.grid(row=0, column=1, padx=2, pady=5)
+        self.set_text(self.x_entry, '1')
         
         # label y (Norte)
         self.label_tam_area = ttk.Label(self.lb_coordenadas, text='Norte: ')
@@ -55,6 +56,7 @@ class View(ttk.Frame):
         self.y_var = tk.StringVar()
         self.y_entry = ttk.Entry(self.lb_coordenadas, textvariable=self.y_var, width=5)
         self.y_entry.grid(row=0, column=3, padx=2, pady=5)
+        self.set_text(self.y_entry, '1')
         
         self.s = ttk.Style(self.lb_coordenadas)
         #self.s.theme_use('default')
@@ -104,7 +106,7 @@ class View(ttk.Frame):
         
         # figure matplotlib ----------------------------------------------------
         #self.graficar(10)
-        self.graficar(10, [], [])
+        self.graficar()
         # ----------------------------------------------------------------------
 
     def set_controller(self, controller):
@@ -121,6 +123,11 @@ class View(ttk.Frame):
         if self.controller:
             self.controller.import_data()
     
+    def set_text(self, entry_obj, text):
+        entry_obj.delete(0,END)
+        entry_obj.insert(0,text)
+        return
+    
     def add_item_button_clicked(self):
         if self.controller:
             self.controller.add_item(['0',self.x_var.get(), self.y_var.get()], self.tam_area_var.get())
@@ -131,7 +138,7 @@ class View(ttk.Frame):
             self.controller.generate_dzm_content(x,y, tam_area)
             self.graficar(tam_area, x, y)
 
-    def graficar(self, n, x , y):
+    def graficar(self, n=10, x=[] , y=[]):
         # figure matplotlib ----------------------------------------------------
         # size and color:
         sizes = np.random.uniform(15, 80, len(x))
