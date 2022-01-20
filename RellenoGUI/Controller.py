@@ -22,7 +22,7 @@ class Controller:
     
     def import_data(self):
         try:
-            src = filedialog.askopenfilename(initialdir = "C:/Users/kevin/Documents/ProyectoUbicacionRelleno/MiniZnFiles/Datos-20220111",
+            src = filedialog.askopenfilename(initialdir = "./MiniZnFiles/Datos-20220111",
                                             title = "Select file",
                                             filetypes = [("dzn files","*.dzn")])
             data = self.model.import_data(src)
