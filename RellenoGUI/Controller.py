@@ -1,6 +1,7 @@
 from tkinter import Tk
 from tkinter import filedialog
-
+from unittest import result
+from minizinc import Instance, Model, Solver
 
 class Controller:
     
@@ -13,7 +14,8 @@ class Controller:
         try:
             x,y = self.get_data_tree()
             data = self.generate_dzm_content(x,y, self.get_tam_area())
-            self.view.graficar(self.get_tam_area(), x, y, relleno_x= 10, relleno_y=0 ,solucion=True)
+            self.execute_mzn_file()
+            self.view.graficar(int(self.get_tam_area()), x, y, relleno_x= 10, relleno_y=0 ,solucion=True)
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
@@ -78,14 +80,18 @@ class Controller:
             else:
                 cadena = cadena + line  + " \n"
         self.model.save_data(cadena)
-        #print(cadena)
-        self.extract_dzm_content()
+      
+    def execute_mzn_file(self):
+        print("Ejecutar mzn")
+        src = "./MiniZnFiles/RellenoFloat.mzn"
+        relleno = Model(src)
+        solver = Solver.lookup("coin-bc")
+        relleno.add_file("./Datos.dzn")
+        instance = Instance(solver, relleno)
+        result = instance.solve()
+        print(result)
         
-    def extract_dzm_content(self):
-        #datos = self.model.read_data()
-        #lineas = datos.split(';')
-        #print(lineas)
-        print("extract_dzm_content")
         
+    
         
                 

@@ -1,3 +1,6 @@
+# Python 3.10.1 64-bit (default, May  2 2017, 14:11:10) [MSC v.1500 64 bit (AMD64)] on win32
+# Type "copyright", "credits" or "license()" for more information.
+
 import tkinter as tk
 from tkinter import END, ttk
 from matplotlib import markers
@@ -141,21 +144,14 @@ class View(ttk.Frame):
             self.graficar(tam_area, x, y)
 
     def graficar(self, n=10, x=[] , y=[], relleno_x=-1, relleno_y=-1, solucion = False):
-        
         # figure matplotlib ----------------------------------------------------
-        # size and color:
-        size_points = 200
-        #colors = np.random.uniform(15, 255, len(x)) # tonos grices
-        #colors = cm.rainbow(np.linspace(0, 1, len(x))) # colorido
-        colors = 'r'
         # plot
         fig, ax = plt.subplots()
-        fig.suptitle('Graficas Ubicaciones')
+        fig.suptitle('Region de las ciudades')
         fig.set_facecolor('#F0F0F0')
         # fig plt style sean-whitegrid
         plt.style.use('seaborn-whitegrid')
-        markers = ["o" , "s" , "*" , "D" , "^" , "X"]
-        ax.scatter(x, y, s=size_points , c=colors, vmin=0, vmax=50, marker=markers[0])
+        ax.scatter(x, y, s=200 , c='#1978f5', vmin=0, vmax=50)
         escala = n / 10
         ax.set(xlim=(-1, n+1), xticks=np.arange(0, n+1, step=escala),
                ylim=(-1, n+1), yticks=np.arange(0, n+1, step=escala))
@@ -168,10 +164,11 @@ class View(ttk.Frame):
                         weight="bold",
                         textcoords='offset points',
                         ha='center',
-                        va='center')
+                        va='center',
+                        c='#f3f2f8')
         # Agrega el punto de la ubicacion del relleno
         if (solucion):
-            ax.scatter(relleno_x, relleno_y, s=size_points , c='g', vmin=0, vmax=50, marker=markers[5])
+            ax.scatter(relleno_x, relleno_y, s=200 , c='#42b92a', vmin=0, vmax=50, marker="X")
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=3, rowspan=3, sticky='nsew')
