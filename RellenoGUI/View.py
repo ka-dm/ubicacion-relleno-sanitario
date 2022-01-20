@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import END, ttk
+from matplotlib import markers
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -139,30 +140,38 @@ class View(ttk.Frame):
             self.controller.generate_dzm_content(x,y, tam_area)
             self.graficar(tam_area, x, y)
 
-    def graficar(self, n=10, x=[] , y=[], relleno_x=-1, relleno_y=-1):
+    def graficar(self, n=10, x=[] , y=[], relleno_x=-1, relleno_y=-1, solucion = False):
+        
         # figure matplotlib ----------------------------------------------------
         # size and color:
-        size_points = 50
-        #colors = np.random.uniform(15, 255, len(x))
-        colors = cm.rainbow(np.linspace(0, 1, len(x)))
+        size_points = 200
+        #colors = np.random.uniform(15, 255, len(x)) # tonos grices
+        #colors = cm.rainbow(np.linspace(0, 1, len(x))) # colorido
+        colors = 'r'
         # plot
         fig, ax = plt.subplots()
         fig.suptitle('Graficas Ubicaciones')
         fig.set_facecolor('#F0F0F0')
         # fig plt style sean-whitegrid
         plt.style.use('seaborn-whitegrid')
-        ax.scatter(x, y, s=size_points , c=colors, vmin=0, vmax=50)
+        markers = ["o" , "s" , "*" , "D" , "^" , "X"]
+        ax.scatter(x, y, s=size_points , c=colors, vmin=0, vmax=50, marker=markers[0])
         escala = n / 10
-        ax.set(xlim=(0, n), xticks=np.arange(1, n+1, step=escala),
-               ylim=(0, n), yticks=np.arange(1, n+1, step=escala))
+        ax.set(xlim=(-1, n+1), xticks=np.arange(0, n+1, step=escala),
+               ylim=(-1, n+1), yticks=np.arange(0, n+1, step=escala))
         # Labels points
         for i in range(len(x)):
             ax.annotate(i, 
                         xy=(x[i], y[i]), #show point 
-                        xytext=(5, 2), #show annotate
+                        xytext=(0, 0), #show annotate
+                        fontsize=8,
+                        weight="bold",
                         textcoords='offset points',
-                        ha='right',
-                        va='bottom')
+                        ha='center',
+                        va='center')
+        # Agrega el punto de la ubicacion del relleno
+        if (solucion):
+            ax.scatter(relleno_x, relleno_y, s=size_points , c='g', vmin=0, vmax=50, marker=markers[5])
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=3, rowspan=3, sticky='nsew')

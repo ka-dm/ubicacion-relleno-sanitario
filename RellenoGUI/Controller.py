@@ -13,6 +13,7 @@ class Controller:
         try:
             x,y = self.get_data_tree()
             data = self.generate_dzm_content(x,y, self.get_tam_area())
+            self.view.graficar(self.get_tam_area(), x, y, relleno_x= 10, relleno_y=0 ,solucion=True)
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
