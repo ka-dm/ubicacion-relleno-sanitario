@@ -157,7 +157,7 @@ class View(ttk.Frame):
                ylim=(-1, n+1), yticks=np.arange(0, n+1, step=escala))
         # Labels points
         for i in range(len(x)):
-            ax.annotate(i, 
+            ax.annotate(i+1, 
                         xy=(x[i], y[i]), #show point 
                         xytext=(0, 0), #show annotate
                         fontsize=8,

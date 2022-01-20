@@ -14,8 +14,8 @@ class Controller:
         try:
             x,y = self.get_data_tree()
             data = self.generate_dzm_content(x,y, self.get_tam_area())
-            self.execute_mzn_file()
-            self.view.graficar(int(self.get_tam_area()), x, y, relleno_x= 10, relleno_y=0 ,solucion=True)
+            este, norte, dist = self.execute_mzn_file()
+            self.view.graficar(int(self.get_tam_area()), x, y, relleno_x= este, relleno_y=norte ,solucion=True)
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
@@ -35,7 +35,7 @@ class Controller:
             self.view.show_error(error)
             
     def get_tam_area(self):
-        print(self.model.tam_area)
+        #print("get_tam_area = ",self.model.tam_area)
         return self.model.tam_area
             
     def add_item(self, item_tree, tam_area):
@@ -82,14 +82,15 @@ class Controller:
         self.model.save_data(cadena)
       
     def execute_mzn_file(self):
-        print("Ejecutar mzn")
+        #print("Ejecutar mzn")
         src = "./MiniZnFiles/RellenoFloat.mzn"
         relleno = Model(src)
         solver = Solver.lookup("coin-bc")
         relleno.add_file("./Datos.dzn")
         instance = Instance(solver, relleno)
         result = instance.solve()
-        print(result)
+        print( 'Rusultado mzn >>> Este = ',result["x"], ' Norte = ',result["y"], ' f = ',result["f"])
+        return result["x"], result["y"], result["f"]
         
         
     
