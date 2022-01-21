@@ -143,7 +143,9 @@ class View(ttk.Frame):
             self.controller.generate_dzm_content(x,y, tam_area)
             self.graficar(tam_area, x, y)
 
-    def graficar(self, n=10, x=[] , y=[], relleno_x=-1, relleno_y=-1, solucion = False):
+    def graficar(self, n=10, x=[] , y=[], 
+                 relleno_x=-1, relleno_y=-1, solucion = False,
+                 index_ciudad=-1):
         # figure matplotlib ----------------------------------------------------
         # plot
         fig, ax = plt.subplots()
@@ -168,7 +170,15 @@ class View(ttk.Frame):
                         c='#f3f2f8')
         # Agrega el punto de la ubicacion del relleno
         if (solucion):
+            # add line conecting points
+            point1 = [relleno_x, relleno_y]
+            point2 = [x[index_ciudad], y[index_ciudad]]
+            x_values = [point1[0], point2[0], point2[0]]
+            y_values = [point1[1], point1[1], point2[1]]
+            ax.plot(x_values, y_values)
+            # add "x"
             ax.scatter(relleno_x, relleno_y, s=200 , c='#42b92a', vmin=0, vmax=50, marker="X")
+
         canvas = FigureCanvasTkAgg(fig, master = self)  # Crea el area de dibujo en Tkinter
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=3, rowspan=3, sticky='nsew')

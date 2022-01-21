@@ -15,7 +15,15 @@ class Controller:
             x,y = self.get_data_tree()
             data = self.generate_dzm_content(x,y, self.get_tam_area())
             este, norte, dist = self.execute_mzn_file()
-            self.view.graficar(int(self.get_tam_area()), x, y, relleno_x= este, relleno_y=norte ,solucion=True)
+            index_ciudad = -1
+            for i in range(len(x)):
+                dist_manhattan = abs(x[i] - este) + abs(y[i] - norte)
+                if (dist_manhattan == dist):
+                    print("Ciudad ",i+1," x=", x[i], " y=", y[i])
+                    index_ciudad = i
+            self.view.graficar(int(self.get_tam_area()), x, y, 
+                               relleno_x= este, relleno_y=norte ,solucion=True,
+                               index_ciudad = index_ciudad)
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
