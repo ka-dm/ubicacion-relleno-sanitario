@@ -149,7 +149,7 @@ class View(ttk.Frame):
         # figure matplotlib ----------------------------------------------------
         # plot
         fig, ax = plt.subplots()
-        fig.suptitle('Region de las ciudades')
+        fig.suptitle('Region')
         fig.set_facecolor('#F0F0F0')
         # fig plt style sean-whitegrid
         plt.style.use('seaborn-whitegrid')
