@@ -27,14 +27,14 @@ class View(ttk.Frame):
         
         # labe frame coordenadas
         self.lb_coordenadas = ttk.LabelFrame(self.label_frame, text='Coordeandas')
-        self.lb_coordenadas.grid(column=0, row=1, padx=0, pady=5, columnspan=2, sticky='nsew')
+        self.lb_coordenadas.grid(column=0, row=2, padx=0, pady=5, columnspan=2, sticky='nsew')
 
         # message
         self.message_label = ttk.Label(self, text='', foreground='red')
         self.message_label.grid(row=2, column=1, sticky=tk.W)
 
         # label tamaño area
-        self.label_tam_area = ttk.Label(self.label_frame, text='Region: ')
+        self.label_tam_area = ttk.Label(self.label_frame, text='n: ')
         self.label_tam_area.grid(row=0, column=0)
 
         # tamaño area entry
@@ -42,6 +42,16 @@ class View(ttk.Frame):
         self.tam_area_entry = ttk.Entry(self.label_frame, textvariable=self.tam_area_var, width=10, )
         self.tam_area_entry.grid(row=0, column=1, padx=10, pady=5, columnspan=3, sticky='nsew')
         self.set_text(self.tam_area_entry, '10')
+        
+        # label cantidad ciudades
+        self.label_cant_ciud = ttk.Label(self.label_frame, text='m: ')
+        self.label_cant_ciud.grid(row=1, column=0)
+
+        # entry cantidad ciudades
+        self.cant_ciud_var = tk.StringVar()
+        self.cant_ciud_entry = ttk.Entry(self.label_frame, textvariable=self.cant_ciud_var, width=10, )
+        self.cant_ciud_entry.grid(row=1, column=1, padx=10, pady=5, columnspan=3, sticky='nsew')
+        self.set_text(self.cant_ciud_entry, '10')
         
         # label x (Este)
         self.label_tam_area = ttk.Label(self.lb_coordenadas, text='Este: ')
@@ -73,6 +83,16 @@ class View(ttk.Frame):
                                           style='flat.TButton')
         self.add_item_button.config(width=0)
         self.add_item_button.grid(row=0, column=4, padx=0, pady=0)
+        
+        # gen data button
+        self.img_gen = tk.PhotoImage(file='plus.png')
+        self.gen_data_button = ttk.Button(self.lb_coordenadas, 
+                                          image=self.img_gen,
+                                          command=self.gen_random_data_clicked,
+                                          style='flat.TButton')
+        self.gen_data_button.config(width=0)
+        self.gen_data_button.grid(row=1, column=0, padx=0, pady=0)
+        
         # treeview -------------------------------------------------------------
         # define columns
         self.columns = ('1', '2', '3')
@@ -142,6 +162,16 @@ class View(ttk.Frame):
             #print("x = ", x)
             self.controller.generate_dzm_content(x,y, tam_area)
             self.graficar(tam_area, x, y)
+
+    def gen_random_data_clicked(self):
+        if self.controller:
+            print("gen_random_data_clicked")
+            tam_area = int(self.controller.get_tam_area())
+            data_ciudades = self.controller.generar_ciudades(10, tam_area)
+            print("data = ", data_ciudades)
+            #x,y = self.controller.get_data_tree()
+            #self.controller.generar_dzm_content(x,y, tam_area)
+            #self.graficar(tam_area, x, y)
 
     def graficar(self, n=10, x=[] , y=[], 
                  relleno_x=-1, relleno_y=-1, solucion = False,

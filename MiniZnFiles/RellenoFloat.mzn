@@ -16,8 +16,4 @@ array[int] of var float: dist = [abs(x - ciudades[i,1]) + abs(y - ciudades[i,2])
 constraint f = min(dist);
 solve maximize f;
  
-output [
-  "este = ", show(x),"\n",
-  "norte = ", show(x),"\n",
-  "distancia = ", show(f),"\n",
-  ];
+output ["este = ", show(x),"\n", "norte = ", show(x),"\n","distancia = ", show(f),"\n"];

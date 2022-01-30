@@ -1,3 +1,5 @@
+
+import random
 from tkinter import Tk
 from tkinter import filedialog
 from unittest import result
@@ -100,7 +102,31 @@ class Controller:
         print( 'Rusultado mzn >>> Este = ',result["x"], ' Norte = ',result["y"], ' f = ',result["f"])
         return result["x"], result["y"], result["f"]
         
-        
+    def generar_ciudades(self, m, n):
+        if (m <= n):
+            ciudades = []
+            for i in range(m):
+                x = random.randint(0,n)
+                y = random.randint(0,n)
+                while ([x,y] in ciudades):
+                    x = random.randint(0,n)
+                    y = random.randint(0,n)
+                ciudades.append([x,y])
+            return ciudades
+        else: 
+            return "Eror: no se puede generar ciudades con una cantidad de ciudades mayor a la cantidad de area"
     
+    
+    
+        
+        
+        
+            
+            
+            
+        
+        
+            
+
         
                 
