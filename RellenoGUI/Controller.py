@@ -3,6 +3,7 @@ import random
 import statistics
 from tkinter import Tk
 from tkinter import filedialog
+import tkinter
 from unittest import result
 from minizinc import Instance, Model, Solver
 import numpy as np
@@ -33,6 +34,12 @@ class Controller:
                                relleno_x= este, relleno_y=norte ,solucion=True,
                                index_ciudad = index_ciudad)
             #print('Timepo de ejecucion:', time)
+            self.view.text_output.delete(1.0, tkinter.END)
+            self.view.text_output.insert(tkinter.END, 
+                " Este " + str(round(este,4)) + "\n " +
+                "Norte " + str(round(norte,4)) + "\n " +
+                "Distancia " + str(round(dist,4)))
+            
             return time
         except ValueError as error:
             # show an error message
@@ -40,7 +47,7 @@ class Controller:
     
     def import_data(self):
         try:
-            src = filedialog.askopenfilename(initialdir = "./MiniZnFiles/Datos-20220111",
+            src = filedialog.askopenfilename(initialdir = "./",
                                             title = "Select file",
                                             filetypes = [("dzn files","*.dzn")])
             data = self.model.import_data(src)
@@ -71,13 +78,13 @@ class Controller:
             self.view.show_error(error)
     
     def set_data_tree(self, data):
-        self.celar_data_tree()
+        self.clear_data_tree()
         for i in range(0 , len(data['ciudades']), 2):
             este = data['ciudades'][i]
             norte = data['ciudades'][i+1]
             self.add_item(['0',data['ciudades'][i],data['ciudades'][i+1]], data['n'])
         
-    def celar_data_tree(self):
+    def clear_data_tree(self):
         for i in self.view.tree.get_children():
             self.view.tree.delete(i)
     

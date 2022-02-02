@@ -23,11 +23,15 @@ class View(ttk.Frame):
         
         # labe frame parametros
         self.label_frame = ttk.LabelFrame(self, text='Parametros')
-        self.label_frame.grid(column=0, row=0, padx=0, pady=5, columnspan=2, sticky='nsew')
+        self.label_frame.grid(column=0, row=0, padx=0, pady=5, columnspan=3, sticky='nsew')
         
         # labe frame coordenadas
         self.lb_coordenadas = ttk.LabelFrame(self.label_frame, text='Coordeandas')
-        self.lb_coordenadas.grid(column=0, row=2, padx=0, pady=5, columnspan=2, sticky='nsew')
+        self.lb_coordenadas.grid(column=0, row=2, padx=0, pady=5, columnspan=3, sticky='nsew')
+        
+        # labe frame output
+        self.lb_output = ttk.LabelFrame(self, text='Salida')
+        self.lb_output.grid(column=0, row=4, padx=0, pady=5, columnspan=3, sticky='nsew')
 
         # message
         self.message_label = ttk.Label(self, text='', foreground='red')
@@ -82,7 +86,16 @@ class View(ttk.Frame):
         self.add_item_button = ttk.Button(self.lb_coordenadas, image=self.img_add, command=self.add_item_button_clicked,
                                           style='flat.TButton')
         self.add_item_button.config(width=0)
-        self.add_item_button.grid(row=0, column=4, padx=0, pady=0)
+        self.add_item_button.grid(row=1, column=3, padx=0, pady=0)
+        
+        # clear data button
+        self.img_clear = tk.PhotoImage(file='RellenoGUI\img\clear.png')
+        self.clear_data_button = ttk.Button(self.lb_coordenadas, 
+                                          image=self.img_clear,
+                                          command=self.clear_data_clicked,
+                                          style='flat.TButton')
+        self.clear_data_button.config(width=0)
+        self.clear_data_button.grid(row=1, column=0, padx=0, pady=0)
         
         # gen data button
         self.img_gen = tk.PhotoImage(file='RellenoGUI\img\shuffle.png')
@@ -91,7 +104,7 @@ class View(ttk.Frame):
                                           command=self.gen_random_data_clicked,
                                           style='flat.TButton')
         self.gen_data_button.config(width=0)
-        self.gen_data_button.grid(row=1, column=0, padx=0, pady=0)
+        self.gen_data_button.grid(row=1, column=1, padx=0, pady=0)
         
         # treeview -------------------------------------------------------------
         # define columns
@@ -128,6 +141,13 @@ class View(ttk.Frame):
         # run model button
         self.save_button = ttk.Button(self.lb_data_controllers, text='Ejecutar', command=self.save_button_clicked)
         self.save_button.grid(row=0, column=2, padx=10)
+        
+        # output informations
+        self.text_output = tk.Text(self.lb_output ,
+                                width=20, height=3)
+        self.text_output.insert(tk.END,
+            "Salida del modelo")
+        self.text_output.grid(row=6, column=0, padx=10)
         
         # figure matplotlib ----------------------------------------------------
         #self.graficar(10)
@@ -168,7 +188,11 @@ class View(ttk.Frame):
             tam_area = int(self.tam_area_entry.get())
             cant_ciudades = int(self.cant_ciud_entry.get())
             self.controller.generar_ciudades_aleatorias(cant_ciudades , tam_area)
-            
+    
+    def clear_data_clicked(self):
+        print("clear data")   
+        self.controller.clear_data_tree() 
+        self.graficar()
             
     def graficar(self, n=10, x=[] , y=[], 
                  relleno_x=-1, relleno_y=-1, solucion = False,
