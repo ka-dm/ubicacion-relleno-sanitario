@@ -1,9 +1,11 @@
 
 import random
+import statistics
 from tkinter import Tk
 from tkinter import filedialog
 from unittest import result
 from minizinc import Instance, Model, Solver
+import numpy as np
 
 class Controller:
     
@@ -16,7 +18,11 @@ class Controller:
         try:
             x,y = self.get_data_tree()
             data = self.generate_dzm_content(x,y, self.get_tam_area())
-            este, norte, dist = self.execute_mzn_file()
+            output_mzn =  self.execute_mzn_file()
+            este = output_mzn['x']
+            norte = output_mzn['y']
+            dist = output_mzn['f']
+            time = output_mzn['time']
             index_ciudad = -1
             for i in range(len(x)):
                 dist_manhattan = abs(x[i] - este) + abs(y[i] - norte)
@@ -26,6 +32,8 @@ class Controller:
             self.view.graficar(int(self.get_tam_area()), x, y, 
                                relleno_x= este, relleno_y=norte ,solucion=True,
                                index_ciudad = index_ciudad)
+            #print('Timepo de ejecucion:', time)
+            return time
         except ValueError as error:
             # show an error message
             self.view.show_error(error)
@@ -37,6 +45,7 @@ class Controller:
                                             filetypes = [("dzn files","*.dzn")])
             data = self.model.import_data(src)
             self.set_data_tree(data)
+            print(type(data), data)
             x_array, y_array = self.get_data_tree()
             self.view.set_text(self.view.tam_area_entry, data['n'])
             self.view.graficar(data['n'], x_array, y_array)
@@ -91,35 +100,64 @@ class Controller:
                 cadena = cadena + line  + " \n"
         self.model.save_data(cadena)
       
-    def execute_mzn_file(self):
+    def execute_mzn_file(self, src_data = './Datos.dzn'):
         #print("Ejecutar mzn")
         src = "./MiniZnFiles/RellenoFloat.mzn"
         relleno = Model(src)
         solver = Solver.lookup("coin-bc")
-        relleno.add_file("./Datos.dzn")
+        relleno.add_file(src_data)
         instance = Instance(solver, relleno)
         result = instance.solve()
-        print( 'Rusultado mzn >>> Este = ',result["x"], ' Norte = ',result["y"], ' f = ',result["f"])
-        return result["x"], result["y"], result["f"]
+        #print( 'Rusultado mzn >>> Este = ',result["x"], ' Norte = ',result["y"], ' f = ',result["f"])
+        print('Rusultado mzn >>> \n', result, '>>>')
+        return {'x': result["x"], 'y':  result["y"],'f':  result["f"], 'time': result.statistics['solveTime']}
         
-    def generar_ciudades(self, m, n):
-        if (m <= n):
-            ciudades = []
+    def generar_ciudades_aleatorias(self, m, n):
+        if (m < (n+1)*(n+1)):
+            ciudaes = []
             for i in range(m):
                 x = random.randint(0,n)
                 y = random.randint(0,n)
-                while ([x,y] in ciudades):
+                while ([x,y] in ciudaes):
                     x = random.randint(0,n)
                     y = random.randint(0,n)
-                ciudades.append([x,y])
-            return ciudades
-        else: 
-            return "Eror: no se puede generar ciudades con una cantidad de ciudades mayor a la cantidad de area"
+                ciudaes.append([x,y])
+            ciudaes = np.array(ciudaes).flatten()
+            data = {'n': n,'m': m,'ciudades': ciudaes}
+            self.set_data_tree(data)
+            x_array, y_array = self.get_data_tree()
+            self.view.graficar(data['n'], x_array, y_array)
+            return data
+        else:
+            print("Error: m > n+1*n+1")
     
-    
-    
+    def aux_generar_ciudades_aleatorias(self, m, n):
+        ciudaes = []
+        for i in range(m):
+            x = random.randint(0,n)
+            y = random.randint(0,n)
+            while ([x,y] in ciudaes):
+                x = random.randint(0,n)
+                y = random.randint(0,n)
+                ciudaes.append([x,y])
+                
+        print(ciudaes)
+        ciudaes = np.array(ciudaes).flatten()
+        return {'n': n,'m': m,'ciudades': ciudaes}
+            
+    def pruebas(self):
+        times = []
+        tam = [5,10,50,100,500,1000]
+        cant_pruebas = 3
         
-        
+        for j in range(len(tam)):
+            for i in range(cant_pruebas):
+                data = self.generar_ciudades_aleatorias(tam[j], tam[j])
+                time = self.save()
+            times.append(time)   
+            #mean = statistics.mean(times)
+            mean = 0
+            print('Prueba', i,' promedio = ',mean, '\n', times)
         
             
             

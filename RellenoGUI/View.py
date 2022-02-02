@@ -78,14 +78,14 @@ class View(ttk.Frame):
         self.s.configure('flat.TButton', borderwidth=0)
         
         # add item button
-        self.img_add = tk.PhotoImage(file='plus.png')
+        self.img_add = tk.PhotoImage(file='RellenoGUI\img\plus.png')
         self.add_item_button = ttk.Button(self.lb_coordenadas, image=self.img_add, command=self.add_item_button_clicked,
                                           style='flat.TButton')
         self.add_item_button.config(width=0)
         self.add_item_button.grid(row=0, column=4, padx=0, pady=0)
         
         # gen data button
-        self.img_gen = tk.PhotoImage(file='plus.png')
+        self.img_gen = tk.PhotoImage(file='RellenoGUI\img\shuffle.png')
         self.gen_data_button = ttk.Button(self.lb_coordenadas, 
                                           image=self.img_gen,
                                           command=self.gen_random_data_clicked,
@@ -165,14 +165,11 @@ class View(ttk.Frame):
 
     def gen_random_data_clicked(self):
         if self.controller:
-            print("gen_random_data_clicked")
-            tam_area = int(self.controller.get_tam_area())
-            data_ciudades = self.controller.generar_ciudades(10, tam_area)
-            print("data = ", data_ciudades)
-            #x,y = self.controller.get_data_tree()
-            #self.controller.generar_dzm_content(x,y, tam_area)
-            #self.graficar(tam_area, x, y)
-
+            tam_area = int(self.tam_area_entry.get())
+            cant_ciudades = int(self.cant_ciud_entry.get())
+            self.controller.generar_ciudades_aleatorias(cant_ciudades , tam_area)
+            
+            
     def graficar(self, n=10, x=[] , y=[], 
                  relleno_x=-1, relleno_y=-1, solucion = False,
                  index_ciudad=-1):
